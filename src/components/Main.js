@@ -1,27 +1,36 @@
-import CartItem from './CartItem'
+import CartItem from "./CartItem";
 
-function Main({cartItems}) {
-  console.log(cartItems)
+function Main({ items, cartItems, addToCart, removeFromCart, total }) {
   return (
     <main id="cart">
       <h2>Your Cart</h2>
-      <div class="cart--item-list-container">
-        <ul class="item-list cart--item-list">
-        {
-          cartItems.items.map(item => (<CartItem item={item}/>))
-        }        
+      <div className="cart--item-list-container">
+        <ul className="item-list cart--item-list">
+          {cartItems.map((cartItem) => {
+          const item = items.find(function (item) {
+            return item.id === cartItem.id
+          })
+            return (
+              <CartItem
+                item={item}
+                cartItem={cartItem}
+                addToCart={addToCart}
+                removeFromCart={removeFromCart}
+              />
+            );
+          })}
         </ul>
       </div>
-      <div class="total-section">
+      <div className="total-section">
         <div>
           <h3>Total</h3>
         </div>
         <div>
-          <span class="total-number">£0.00</span>
+          <span className="total-number">£{total.toFixed(2)}</span>
         </div>
       </div>
     </main>
   );
 }
 
-export default Main
+export default Main;

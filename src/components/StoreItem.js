@@ -1,26 +1,19 @@
-import '../styles/store-item.css'
-import Item from '../components/Item'
+import "../styles/store-item.css";
 
-function StoreItem(item, cartItems) {
-
-  function addItemToCart() {
-    const cartItem = item
-    cartItems = {...cartItems, cartItem}
-  }
-
+function StoreItem({item, addToCart}) {
   return (
-
-    <li>
+    <li key={item.id}>
       <div className="store--item-icon">
-      <p>{item.item.name}</p>
-        <Item item={item}/>
+      <img 
+          src={`./assets/icons/${item.id}.svg`}
+          alt={item.name}
+         /> 
       </div>
-      <button
-      onClick={addItemToCart}
-      >Add to cart</button>
+      <button onClick={() => {
+                  addToCart(item.id)
+      }}>Add to cart</button> 
     </li>
-  );
+  )
 }
 
-
-export default StoreItem
+export default StoreItem;
