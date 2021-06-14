@@ -72,7 +72,7 @@ Your store item should have the following structure
 export default function App() {
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [newItem, setNewItem] = useState("");
+  const [newItem, setNewItem] = useState({ name: "", price: null });
 
   useEffect(() => {
     fetch("http://localhost:4000/items")
@@ -82,13 +82,17 @@ export default function App() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    let name = event.target.name;
+    let price = event.target.price;
 
     const newItem = {
-      title: todoInput,
+      name: name,
+      price: price,
     };
+    return newItem
   }
 
-  function addItemToStore() {
+  function addItemToStore(newItem) {
     fetch("http://localhost:4000/items", {
       method: "POST",
       headers: {
@@ -178,7 +182,11 @@ export default function App() {
         removeFromCart={removeFromCart}
         total={total}
       />
-      <AddStoreItem addItemToStore={addItemToStore} />
+      <AddStoreItem
+        handleSubmit={handleSubmit}
+        addItemToStore={addItemToStore}
+        newItem={newItem}
+      />
     </div>
   );
 }
