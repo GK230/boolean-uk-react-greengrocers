@@ -51,5 +51,16 @@
       "price": 0.35
     }
   ],
-  "cart": []
+  "cart": [{
+    "id": "001-beetroot",
+    "quantity": 6
+  },
+  {
+    "id": "002-carrot",
+    "quantity": 5
+  },
+  {
+    "id": "003-apple",
+    "quantity": 1
+  }]
 }

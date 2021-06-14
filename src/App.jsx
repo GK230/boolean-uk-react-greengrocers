@@ -1,9 +1,9 @@
 import "./styles/index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles/index.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
-import Item from "./components/Item";
+import AddStoreItem from "./components/AddStoreItem";
 
 /* 
 Your store item should have the following structure
@@ -16,75 +16,97 @@ Your store item should have the following structure
 
 */
 
-const initialItems = [
-  {
-    id: "001-beetroot",
-    name: "beetroot",
-    price: 0.35,
-  },
-  {
-    id: "002-carrot",
-    name: "carrot",
-    price: 0.2,
-  },
-  {
-    id: "003-apple",
-    name: "apple",
-    price: 0.55,
-  },
-  {
-    id: "004-apricot",
-    name: "apricot",
-    price: 0.7,
-  },
-  {
-    id: "005-avocado",
-    name: "avocado",
-    price: 0.8,
-  },
-  {
-    id: "006-bananas",
-    name: "bananas",
-    price: 0.25,
-  },
-  {
-    id: "007-bell-pepper",
-    name: "bell-pepper",
-    price: 0.5,
-  },
-  {
-    id: "008-berry",
-    name: "berry",
-    price: 0.45,
-  },
-  {
-    id: "009-blueberry",
-    name: "blueberry",
-    price: 0.55,
-  },
-  {
-    id: "010-eggplant",
-    name: "eggplant",
-    price: 0.4,
-  },
-];
+// const initialItems = [
+//   {
+//     id: "001-beetroot",
+//     name: "beetroot",
+//     price: 0.35,
+//   },
+//   {
+//     id: "002-carrot",
+//     name: "carrot",
+//     price: 0.2,
+//   },
+//   {
+//     id: "003-apple",
+//     name: "apple",
+//     price: 0.55,
+//   },
+//   {
+//     id: "004-apricot",
+//     name: "apricot",
+//     price: 0.7,
+//   },
+//   {
+//     id: "005-avocado",
+//     name: "avocado",
+//     price: 0.8,
+//   },
+//   {
+//     id: "006-bananas",
+//     name: "bananas",
+//     price: 0.25,
+//   },
+//   {
+//     id: "007-bell-pepper",
+//     name: "bell-pepper",
+//     price: 0.5,
+//   },
+//   {
+//     id: "008-berry",
+//     name: "berry",
+//     price: 0.45,
+//   },
+//   {
+//     id: "009-blueberry",
+//     name: "blueberry",
+//     price: 0.55,
+//   },
+//   {
+//     id: "010-eggplant",
+//     name: "eggplant",
+//     price: 0.4,
+//   },
+// ];
 
 export default function App() {
-  const [items, setItems] = useState(initialItems);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: "001-beetroot",
-      quantity: 6,
-    },
-    {
-      id: "002-carrot",
-      quantity: 5,
-    },
-    {
-      id: "003-apple",
-      quantity: 1,
-    },
-  ]);
+  const [items, setItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [newItem, setNewItem] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:4000/items")
+      .then((resp) => resp.json())
+      .then((itemsFromServer) => setItems(itemsFromServer));
+  }, []);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const newItem = {
+      title: todoInput,
+    };
+  }
+
+  function addItemToStore() {
+    fetch("http://localhost:4000/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    })
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json();
+        } else {
+          throw Error("Failed to create new item.");
+        }
+      })
+      .then((newItemFromServer) => {
+        setItems([...items, newItemFromServer]);
+      });
+  }
 
   function addToCart(itemId) {
     // EITHER THE ITEM IS ALREADY IN THE CART, OR NOT
@@ -156,6 +178,7 @@ export default function App() {
         removeFromCart={removeFromCart}
         total={total}
       />
+      <AddStoreItem addItemToStore={addItemToStore} />
     </div>
   );
 }
